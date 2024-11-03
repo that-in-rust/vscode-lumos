@@ -51,3 +51,6 @@ code --install-extension vscode-lumos-0.0.1.vsix
 # Optional: For marketplace publishing
 # vsce login <publisher-name>
 # vsce publish
+#rm -rf node_modules package-lock.json
+
+
