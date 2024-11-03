@@ -1,0 +1,182 @@
+
+## Required Files Overview
+
+1. package.json
+- Main extension manifest
+- Contains metadata, dependencies, and contribution points
+- Key sections:
+  - name, version, publisher
+  - activationEvents
+  - contributes (languages, grammars)
+  - extensionDependencies (java, rust)
+  - scripts
+  - devDependencies
+
+2. syntaxes/codeblock.tmLanguage.json
+- TextMate grammar file
+- Defines code block recognition patterns
+- Contains:
+  - scopeName: "source.codeblock"
+  - patterns for ```java and ```rust blocks
+  - embedded code handling
+  - language injection rules
+
+3. language-configuration.json
+- Language feature definitions
+- Contains:
+  - comments configuration
+  - brackets
+  - autoClosingPairs
+  - surroundingPairs
+
+4. .vscode/launch.json
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}"
+            ]
+        }
+    ]
+}
+```
+
+5. .vscode/tasks.json
+```json
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "watch",
+            "problemMatcher": "$tsc-watch",
+            "isBackground": true
+        }
+    ]
+}
+```
+
+## Development Steps
+
+1. Environment Setup
+- Install Node.js
+- Install global dependencies (yo, generator-code, @vscode/vsce)
+- Run scaffold generator (yo code)
+
+2. Project Configuration
+- Create directories (syntaxes, .vscode)
+- Create all required files
+- Configure package.json:
+  - Add language contributions
+  - Add grammar definitions
+  - Set up dependencies
+
+3. Grammar Development
+- Define code block patterns in codeblock.tmLanguage.json
+- Set up language injection rules
+- Configure scope names and patterns
+- Test with sample code blocks
+
+4. Testing
+- Launch extension in debug mode (F5)
+- Test with sample .txt files containing:
+  - Java code blocks
+  - Rust code blocks
+- Use Developer: Inspect Editor Tokens and Scopes for verification
+
+5. Packaging
+- Update README.md and CHANGELOG.md
+- Run vsce package
+- Test .vsix installation locally
+
+6. Optional Publishing
+- Create marketplace publisher account
+- Generate Personal Access Token
+- Login with vsce
+- Publish extension
+
+## File Content Templates
+
+1. Minimal package.json structure:
+```json
+{
+  "name": "code-block-highlighter",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "plaintext",
+        "aliases": ["Plain Text"],
+        "extensions": [".txt"]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "plaintext",
+        "scopeName": "source.codeblock",
+        "path": "./syntaxes/codeblock.tmLanguage.json",
+        "injectTo": ["text.plain"]
+      }
+    ]
+  },
+  "extensionDependencies": [
+    "vscode.java",
+    "rust-lang.rust"
+  ]
+}
+```
+
+2. Basic codeblock.tmLanguage.json structure:
+```json
+{
+  "scopeName": "source.codeblock",
+  "patterns": [
+    {
+      "name": "markup.codeblock",
+      "begin": "(^\\s*)(```)(java|rust)\\s*$",
+      "end": "^(\\s*)(```)$",
+      "patterns": [
+        {
+          "include": "source.java"
+        },
+        {
+          "include": "source.rust"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Testing Checklist
+
+1. Basic Functionality
+- [ ] Code blocks are recognized
+- [ ] Syntax highlighting works for Java
+- [ ] Syntax highlighting works for Rust
+- [ ] No conflicts with plain text
+
+2. Edge Cases
+- [ ] Nested code blocks
+- [ ] Empty code blocks
+- [ ] Invalid language identifiers
+- [ ] Mixed language blocks
+
+3. Performance
+- [ ] Large files handling
+- [ ] Multiple code blocks in single file
+- [ ] Memory usage
+
+## Platform Notes
+
+- Windows: Watch for file attribute preservation
+- Linux/macOS: Preferred for packaging
+- Use --target flag for platform-specific builds 

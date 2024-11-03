@@ -1,0 +1,53 @@
+# 1. Install nvm (Node Version Manager) - most flexible solution
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
+
+# 2. Restart terminal or source profile
+source ~/.bashrc
+
+# 3. Install latest Node LTS version and set as default
+nvm install --lts
+nvm use --lts
+nvm alias default 'lts/*'
+
+# 4. Update npm to latest
+npm install -g npm@latest
+
+# 5. Install required tools
+npm install -g yo                # Yeoman - project scaffolding tool
+npm install -g generator-code    # VS Code extension template
+npm install -g @vscode/vsce      # VS Code extension packaging tool
+
+
+# 7. Run Yeoman with VS Code template
+yo code
+# Interactive prompts:
+# - Extension type: New Extension (TypeScript)
+# - Extension name: vscode-lumos
+# - Description: VS Code extension for syntax highlighting in .txt files
+# - Initialize git repo: No
+# - Bundle with webpack: No
+# - Package manager: npm
+
+# 8. Move generated files from subfolder to parent directory
+mv vscode-lumos/* .
+mv vscode-lumos/.* . 2>/dev/null || true  # Move hidden files, ignore errors
+rm -r vscode-lumos  # Remove empty subfolder
+
+# 9. Create syntaxes directory for our grammar file
+mkdir -p syntaxes
+
+# 10. Install dependencies
+npm install
+
+# 11. Compile TypeScript
+npm run compile
+
+# 12. Package the extension
+vsce package
+
+# 13. Install extension locally for testing
+code --install-extension vscode-lumos-0.0.1.vsix
+
+# Optional: For marketplace publishing
+# vsce login <publisher-name>
+# vsce publish

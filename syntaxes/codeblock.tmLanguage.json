@@ -1,0 +1,21 @@
+{
+  "scopeName": "source.codeblock",
+  "patterns": [
+    {
+      "name": "markup.codeblock",
+      "begin": "(^\\s*)(```)(java|rust)\\s*$",
+      "beginCaptures": {
+        "3": { "name": "language.identifier" }
+      },
+      "end": "^(\\s*)(```)$",
+      "patterns": [
+        {
+          "include": "source.java"
+        },
+        {
+          "include": "source.rust"
+        }
+      ]
+    }
+  ]
+} 
