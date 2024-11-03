@@ -8,6 +8,10 @@ A VS Code extension for syntax highlighting Java and Rust code blocks in .txt fi
 - Syntax highlighting for Rust code blocks in .txt files
 - Supports code blocks marked with triple backticks (```)
 
+Example screenshot:
+
+![alt text](<Screenshot from 2024-11-03 14-55-20.png>)
+
 ## Usage
 
 In any .txt file:
